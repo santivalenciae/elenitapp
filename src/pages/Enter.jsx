@@ -20,7 +20,11 @@ export default function Enter() {
       await enter(username.trim())
       navigate('/onboarding')
     } catch (err) {
-      setError('Ese nombre ya está en uso, prueba otro 😅')
+      if (err?.code === '23505') {
+        setError('Ese nombre ya está en uso, prueba otro 😅')
+      } else {
+        setError(err?.message || 'Error al entrar, intenta de nuevo')
+      }
     } finally {
       setLoading(false)
     }
