@@ -48,10 +48,22 @@ function RedirectIfLoggedIn({ children }) {
 
 function AppInit() {
   const profile = useAuthStore((s) => s.profile)
+  const refreshProfile = useAuthStore((s) => s.refreshProfile)
   const syncFromProfile = useProgressStore((s) => s.syncFromProfile)
+
+  // Al arrancar la app, si hay sesión guardada → traer progreso actualizado de Supabase
+  useEffect(() => {
+    if (!profile) return
+    refreshProfile().then((latest) => {
+      if (latest) syncFromProfile(latest)
+    })
+  }, []) // solo al montar
+
+  // Si el perfil cambia en Zustand, sincronizar el progreso
   useEffect(() => {
     if (profile) syncFromProfile(profile)
   }, [profile, syncFromProfile])
+
   return null
 }
 

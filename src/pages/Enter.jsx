@@ -33,7 +33,9 @@ export default function Enter() {
     setLoading(true)
     try {
       await enter(username.trim())
-      navigate('/onboarding')
+      // Si ya tiene equipo (jugador que regresa) → ir directo al mundo
+      const profile = useAuthStore.getState().profile
+      navigate(profile?.team_id ? '/world' : '/onboarding')
     } catch (err) {
       if (err?.code === '23505') {
         setError('Ese nombre ya está en uso, prueba otro 😅')

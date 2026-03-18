@@ -19,6 +19,7 @@ import { SUBJECTS } from '../../config/subjects'
 export function LessonBase({ subject }) {
   const navigate = useNavigate()
   const profile = useAuthStore((s) => s.profile)
+  const updateProfile = useAuthStore((s) => s.updateProfile)
   const { addXP, level, pendingLevelUp, clearPendingLevelUp } = useProgressStore()
 
   const { data: questions, isLoading } = useQuestions(subject, profile?.level ?? 1)
@@ -86,21 +87,38 @@ export function LessonBase({ subject }) {
 
   async function persistProgress(lastCorrect, lastXp) {
     if (!profile) return
+
+    const { xp: newXP, level: newLevel, fruitcoins: newFruitcoins } = useProgressStore.getState()
+    const sessionCorrect = score + (lastCorrect ? 1 : 0)
+    const sessionXP = totalXPEarned + (lastCorrect ? lastXp : 0)
+
+    // Acumular estadísticas de progreso por materia
+    const { data: existing } = await supabase
+      .from('user_progress')
+      .select('questions_answered, questions_correct, total_xp_earned')
+      .eq('user_id', profile.id)
+      .eq('subject', subject)
+      .maybeSingle()
+
     await supabase.from('user_progress').upsert(
       {
         user_id: profile.id,
         subject,
-        questions_answered: questions.length,
-        questions_correct: score + (lastCorrect ? 1 : 0),
-        total_xp_earned: totalXPEarned + (lastCorrect ? lastXp : 0),
+        questions_answered: (existing?.questions_answered ?? 0) + questions.length,
+        questions_correct: (existing?.questions_correct ?? 0) + sessionCorrect,
+        total_xp_earned: (existing?.total_xp_earned ?? 0) + sessionXP,
       },
       { onConflict: 'user_id,subject' }
     )
-    // Sync profile XP/level
+
+    // Guardar XP/nivel/monedas actualizados en Supabase
     await supabase
       .from('profiles')
-      .update({ xp: useProgressStore.getState().xp, level: useProgressStore.getState().level, fruitcoins: useProgressStore.getState().fruitcoins })
+      .update({ xp: newXP, level: newLevel, fruitcoins: newFruitcoins })
       .eq('id', profile.id)
+
+    // Actualizar también localStorage para que el próximo inicio cargue los valores correctos
+    updateProfile({ xp: newXP, level: newLevel, fruitcoins: newFruitcoins })
   }
 
   if (isLoading) {
