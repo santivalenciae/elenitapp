@@ -22,7 +22,8 @@ export function LessonBase({ subject }) {
   const updateProfile = useAuthStore((s) => s.updateProfile)
   const { addXP, level, pendingLevelUp, clearPendingLevelUp } = useProgressStore()
 
-  const { data: questions, isLoading } = useQuestions(subject, profile?.level ?? 1)
+  const [sessionKey, setSessionKey] = useState(() => Date.now())
+  const { data: questions, isLoading } = useQuestions(subject, profile?.level ?? 1, sessionKey)
   const { data: allPets } = useAllPets()
 
   const [currentIdx, setCurrentIdx] = useState(0)
@@ -152,7 +153,7 @@ export function LessonBase({ subject }) {
         <p className="text-[var(--team-color)] font-bold text-xl mb-6">+{totalXPEarned} XP</p>
         <div className="flex gap-3">
           <Button onClick={() => navigate('/learn')} variant="secondary" size="lg" className="flex-1">Volver</Button>
-          <Button onClick={() => { setCurrentIdx(0); setScore(0); setTotalXPEarned(0); setDone(false) }} size="lg" className="flex-1 bg-orange-500 text-white">
+          <Button onClick={() => { setCurrentIdx(0); setScore(0); setTotalXPEarned(0); setDone(false); setSessionKey(Date.now()) }} size="lg" className="flex-1 bg-orange-500 text-white">
             Repetir
           </Button>
         </div>
