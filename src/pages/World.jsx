@@ -6,10 +6,10 @@ import { TEAMS } from '../config/teams'
 import { ActivityFeed } from '../components/multiplayer/ActivityFeed'
 
 const AREAS = [
-  { to: '/learn/math', label: 'Monte Matemático', emoji: '🔢', color: '#4ECDC4', bg: '#4ECDC420', shadow: '#2EA89E' },
-  { to: '/learn/reading', label: 'Bosque de Libros', emoji: '📖', color: '#FF6B9D', bg: '#FF6B9D20', shadow: '#CC3370' },
-  { to: '/learn/science', label: 'Lab Verde', emoji: '🔬', color: '#7BC67A', bg: '#7BC67A20', shadow: '#4A9E58' },
-  { to: '/learn/speed', label: 'Pista Veloz', emoji: '⚡', color: '#FFB347', bg: '#FFB34720', shadow: '#CC8020' },
+  { to: '/learn/math',    label: 'Monte Matemático', emoji: '🔢', color: '#4ECDC4', bg: '#4ECDC420', shadow: '#2EA89E' },
+  { to: '/learn/reading', label: 'Bosque de Libros',  emoji: '📖', color: '#FF6B9D', bg: '#FF6B9D20', shadow: '#CC3370' },
+  { to: '/learn/science', label: 'Lab Verde',          emoji: '🔬', color: '#7BC67A', bg: '#7BC67A20', shadow: '#4A9E58' },
+  { to: '/learn/speed',   label: 'Pista Veloz',        emoji: '⚡', color: '#FFB347', bg: '#FFB34720', shadow: '#CC8020' },
 ]
 
 const MISSIONS = [
@@ -35,10 +35,12 @@ export default function World() {
   return (
     <div
       className="relative min-h-screen overflow-x-hidden flex flex-col"
-      style={{ background: 'linear-gradient(180deg, #87CEEB 0%, #B0E0FF 25%, #7BC67A 65%, #5A9E58 100%)' }}
+      style={{ background: 'linear-gradient(180deg, #87CEEB 0%, #B0E0FF 22%, #A8D878 60%, #5A9E58 100%)' }}
     >
-      {/* Sky decorations */}
+      {/* ========== SCENIC BACKGROUND ========== */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
+
+        {/* Clouds */}
         {[...Array(4)].map((_, i) => (
           <motion.div
             key={i}
@@ -46,36 +48,89 @@ export default function World() {
             style={{
               width: `${70 + i * 35}px`,
               height: `${25 + i * 8}px`,
-              top: `${3 + i * 6}%`,
+              top: `${3 + i * 5}%`,
               left: `${i * 22 + 5}%`,
               filter: 'blur(2px)',
             }}
-            animate={{ x: [0, 15, 0] }}
+            animate={{ x: [0, 18, 0] }}
             transition={{ duration: 9 + i * 2, repeat: Infinity, ease: 'easeInOut' }}
           />
         ))}
+
         {/* Sparkles */}
-        {[...Array(6)].map((_, i) => (
+        {[...Array(7)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute text-yellow-300 pointer-events-none"
-            style={{ top: `${8 + i * 7}%`, left: `${10 + i * 15}%`, fontSize: '14px' }}
-            animate={{ opacity: [0, 1, 0], scale: [0.5, 1.3, 0.5] }}
-            transition={{ duration: 2 + i * 0.4, repeat: Infinity, delay: i * 0.5 }}
+            style={{ top: `${6 + i * 6}%`, left: `${8 + i * 13}%`, fontSize: '13px' }}
+            animate={{ opacity: [0, 1, 0], scale: [0.5, 1.4, 0.5] }}
+            transition={{ duration: 2 + i * 0.3, repeat: Infinity, delay: i * 0.5 }}
           >✨</motion.div>
         ))}
-        {/* Ground trees */}
-        <div className="absolute bottom-16 left-2 text-5xl opacity-90">🌳</div>
-        <div className="absolute bottom-16 left-14 text-4xl opacity-70">🌲</div>
-        <div className="absolute bottom-16 right-2 text-5xl opacity-90">🌳</div>
-        <div className="absolute bottom-16 right-14 text-4xl opacity-70">🌲</div>
-        <div className="absolute bottom-14 left-1/2 -translate-x-1/2 text-5xl opacity-50">🏰</div>
-        {/* Rocks */}
-        <div className="absolute bottom-12 left-1/4 text-2xl opacity-60">🪨</div>
-        <div className="absolute bottom-10 right-1/4 text-xl opacity-50">🪨</div>
+
+        {/* Mountains — far background */}
+        <div
+          className="absolute flex justify-center items-end gap-0"
+          style={{ bottom: '34%', left: 0, right: 0, opacity: 0.3 }}
+        >
+          {['⛰️','🏔️','⛰️','🏔️','⛰️'].map((m, i) => (
+            <span key={i} style={{ fontSize: i % 2 === 1 ? '5.5rem' : '4rem', lineHeight: 1 }}>{m}</span>
+          ))}
+        </div>
+
+        {/* Castle — large, center, gently floating */}
+        <motion.span
+          className="absolute left-1/2 -translate-x-1/2"
+          style={{
+            bottom: '22%',
+            fontSize: '8rem',
+            lineHeight: 1,
+            opacity: 0.92,
+            filter: 'drop-shadow(0 12px 24px rgba(0,0,0,0.35))',
+          }}
+          animate={{ y: [0, -5, 0] }}
+          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+        >🏰</motion.span>
+
+        {/* Back forest — small trees behind castle */}
+        <div
+          className="absolute flex justify-between items-end"
+          style={{ bottom: '26%', left: '4%', right: '4%', opacity: 0.6 }}
+        >
+          {['🌲','🌳','🌲','🌲','🌳','🌲','🌲'].map((t, i) => (
+            <span key={i} style={{ fontSize: i % 3 === 1 ? '4.5rem' : '3.5rem', lineHeight: 1 }}>{t}</span>
+          ))}
+        </div>
+
+        {/* Mid forest — taller, closer */}
+        <div
+          className="absolute flex justify-around items-end"
+          style={{ bottom: '18%', left: 0, right: 0, opacity: 0.78 }}
+        >
+          {['🌳','🌲','🌲','🌳','🌲','🌲','🌳'].map((t, i) => (
+            <span key={i} style={{ fontSize: i % 3 === 0 ? '6rem' : '5rem', lineHeight: 1 }}>{t}</span>
+          ))}
+        </div>
+
+        {/* Foreground trees LEFT — very large */}
+        <span style={{ position: 'absolute', bottom: '11%', left: '-0.75rem', fontSize: '9rem', lineHeight: 1, opacity: 0.97, filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.3))' }}>🌳</span>
+        <span style={{ position: 'absolute', bottom: '13%', left: '5.5rem',   fontSize: '7rem', lineHeight: 1, opacity: 0.88 }}>🌲</span>
+        <span style={{ position: 'absolute', bottom: '12%', left: '10.5rem',  fontSize: '5.5rem', lineHeight: 1, opacity: 0.78 }}>🌲</span>
+
+        {/* Foreground trees RIGHT — very large */}
+        <span style={{ position: 'absolute', bottom: '11%', right: '-0.75rem', fontSize: '9rem', lineHeight: 1, opacity: 0.97, filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.3))' }}>🌳</span>
+        <span style={{ position: 'absolute', bottom: '13%', right: '5.5rem',   fontSize: '7rem', lineHeight: 1, opacity: 0.88 }}>🌲</span>
+        <span style={{ position: 'absolute', bottom: '12%', right: '10.5rem',  fontSize: '5.5rem', lineHeight: 1, opacity: 0.78 }}>🌲</span>
+
+        {/* Ground details */}
+        <span style={{ position: 'absolute', bottom: '11%', left: '31%',  fontSize: '2rem',   opacity: 0.65 }}>🪨</span>
+        <span style={{ position: 'absolute', bottom: '11%', right: '32%', fontSize: '1.5rem', opacity: 0.55 }}>🪨</span>
+        <span style={{ position: 'absolute', bottom: '11%', left: '40%',  fontSize: '1.5rem', opacity: 0.85 }}>🌸</span>
+        <span style={{ position: 'absolute', bottom: '11%', right: '41%', fontSize: '1.5rem', opacity: 0.85 }}>🌺</span>
+        <span style={{ position: 'absolute', bottom: '10%', left: '48%',  fontSize: '1.4rem', opacity: 0.7  }}>🍄</span>
       </div>
 
-      {/* Content */}
+      {/* ========== UI CONTENT ========== */}
       <div className="relative z-10 flex flex-col min-h-screen pb-4">
 
         {/* Welcome banner */}
@@ -100,7 +155,6 @@ export default function World() {
               </p>
             )}
           </div>
-          {/* XP bar */}
           <div className="flex flex-col items-end gap-1">
             <span className="text-xs font-bold text-gray-500">{xp} / {xpForNextLevel} XP</span>
             <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -115,10 +169,10 @@ export default function World() {
           </div>
         </motion.div>
 
-        {/* Main area: world map */}
+        {/* Map + missions */}
         <div className="flex-1 flex flex-col md:flex-row gap-3 px-4 mt-4">
 
-          {/* Left: map areas */}
+          {/* Left: learning zones + quick links */}
           <div className="flex-1">
             <h2 className="font-extrabold text-white text-lg drop-shadow mb-3" style={{ textShadow: '1px 1px 3px #00000060' }}>
               🗺️ Zonas de Aprendizaje
@@ -153,8 +207,8 @@ export default function World() {
             <div className="grid grid-cols-3 gap-2 mt-3">
               {[
                 { to: '/pets', label: 'Mascotas', emoji: '🥚' },
-                { to: '/shop', label: 'Tienda', emoji: '🛒' },
-                { to: '/team', label: 'Mi Equipo', emoji: '🏝️' },
+                { to: '/shop', label: 'Tienda',   emoji: '🛒' },
+                { to: '/team', label: 'Mi Equipo', emoji: '🏡' },
               ].map((link) => (
                 <Link key={link.to} to={link.to}>
                   <motion.div
@@ -192,7 +246,6 @@ export default function World() {
                   <div className={`w-5 h-5 rounded-full border-2 ${m.done ? 'bg-green-400 border-green-500' : 'border-gray-300'}`} />
                 </motion.div>
               ))}
-              {/* IR! button */}
               <Link to="/learn">
                 <motion.button
                   whileTap={{ scale: 0.95 }}
@@ -209,7 +262,6 @@ export default function World() {
               </Link>
             </div>
 
-            {/* Activity feed */}
             <div className="mt-4">
               <ActivityFeed />
             </div>
