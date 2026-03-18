@@ -1,44 +1,15 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { SUBJECTS } from '../config/subjects'
+import { SceneBackground, SCENE_GRADIENT } from '../components/ui/SceneBackground'
 
 export default function Learn() {
   return (
     <div
       className="relative min-h-screen overflow-hidden"
-      style={{ background: 'linear-gradient(180deg, #87CEEB 0%, #B0E0FF 30%, #7BC67A 65%, #5A9E58 100%)' }}
+      style={{ background: SCENE_GRADIENT }}
     >
-      {/* Background */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {[...Array(3)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-white opacity-60"
-            style={{
-              width: `${60 + i * 30}px`,
-              height: `${22 + i * 7}px`,
-              top: `${4 + i * 6}%`,
-              left: `${10 + i * 28}%`,
-              filter: 'blur(2px)',
-            }}
-            animate={{ x: [0, 12, 0] }}
-            transition={{ duration: 9 + i * 2, repeat: Infinity, ease: 'easeInOut' }}
-          />
-        ))}
-        <div className="absolute bottom-14 left-2 text-5xl opacity-80">🌳</div>
-        <div className="absolute bottom-14 right-2 text-5xl opacity-80">🌳</div>
-        <div className="absolute bottom-12 left-16 text-4xl opacity-60">🌲</div>
-        <div className="absolute bottom-12 right-16 text-4xl opacity-60">🌲</div>
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute text-yellow-300 pointer-events-none"
-            style={{ top: `${8 + i * 8}%`, left: `${8 + i * 18}%`, fontSize: '14px' }}
-            animate={{ opacity: [0, 1, 0], scale: [0.5, 1.2, 0.5] }}
-            transition={{ duration: 2 + i * 0.4, repeat: Infinity, delay: i * 0.5 }}
-          >✨</motion.div>
-        ))}
-      </div>
+      <SceneBackground />
 
       <div className="relative z-10 px-4 pt-6 pb-24 max-w-lg mx-auto">
         <motion.div
