@@ -7,6 +7,7 @@ import { useProgressStore } from '../../store/useProgressStore'
 import { useQuestions } from '../../hooks/useQuestions'
 import { useAllPets } from '../../hooks/usePets'
 import { awardEgg } from '../../lib/eggs'
+import { postActivity } from '../../lib/activity'
 import { QuestionCard } from '../../components/lessons/QuestionCard'
 import { AnswerGrid } from '../../components/lessons/AnswerGrid'
 import { FeedbackOverlay } from '../../components/lessons/FeedbackOverlay'
@@ -56,8 +57,22 @@ export function LessonBase({ subject }) {
 
       if (currentIdx + 1 >= (questions?.length ?? 0)) {
         // Session done — persist progress
+        const finalScore = score + (isCorrect ? 1 : 0)
+        const finalXP = totalXPEarned + (isCorrect ? currentQuestion.xp_reward ?? 10 : 0)
         await persistProgress(isCorrect, currentQuestion.xp_reward ?? 10)
         setDone(true)
+        // Post to activity feed
+        if (profile) {
+          postActivity({
+            userId: profile.id,
+            username: profile.username,
+            teamId: profile.team_id ?? 'cat',
+            subject,
+            score: finalScore,
+            total: questions.length,
+            xpEarned: finalXP,
+          })
+        }
         // Roll egg
         if (allPets && profile) {
           const result = await awardEgg(supabase, profile.id, allPets)

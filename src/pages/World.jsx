@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { useAuthStore } from '../store/useAuthStore'
 import { useProgressStore } from '../store/useProgressStore'
 import { TEAMS } from '../config/teams'
+import { ActivityFeed } from '../components/multiplayer/ActivityFeed'
 
 const AREAS = [
   { to: '/learn/math', label: 'Monte Matemático', emoji: '🔢', color: '#4ECDC4', bg: '#4ECDC420', shadow: '#2EA89E' },
@@ -169,7 +170,7 @@ export default function World() {
             </div>
           </div>
 
-          {/* Right: missions panel */}
+          {/* Right: missions + activity */}
           <div className="md:w-52">
             <h2 className="font-extrabold text-white text-lg drop-shadow mb-3" style={{ textShadow: '1px 1px 3px #00000060' }}>
               📜 Misiones
@@ -208,21 +209,10 @@ export default function World() {
               </Link>
             </div>
 
-            {/* Limonix card */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="mt-3 bg-white/85 backdrop-blur-sm rounded-3xl p-4 text-center shadow-lg"
-            >
-              <motion.div
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                className="text-5xl mb-2"
-              >🍋</motion.div>
-              <p className="font-extrabold text-gray-700 text-sm">Limonix</p>
-              <p className="text-gray-500 text-xs mt-1">¡Sigue aprendiendo para llenar el árbol!</p>
-            </motion.div>
+            {/* Activity feed */}
+            <div className="mt-4">
+              <ActivityFeed />
+            </div>
           </div>
         </div>
       </div>
